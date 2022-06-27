@@ -1,3 +1,12 @@
-basepath=$(cd `dirname $0`; pwd)
-Index="$basepath"
-node "$Index" "$@"
+#!/bin/bash
+if [[ $0 =~ ^\/.* ]]    #判断当前脚本是否为绝对路径，匹配以/开头下的所有
+then
+  script=$0
+else
+  script=$(pwd)/$0
+fi
+
+script=`readlink $script`   #获取文件的真实路径
+script_path=${script%/*}     #获取文件所在的目录
+
+node "$script_path" "$@"
