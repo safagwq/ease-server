@@ -1,5 +1,5 @@
 # web-ease-server
-简易的web api服务
+简易的web文件服务器
 
 ![命令行界面](images/image2.jpg)
 ![浏览器操作界面](images/image1.jpg)
