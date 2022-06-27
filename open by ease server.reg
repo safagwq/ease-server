@@ -1,0 +1,26 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\apiServer]
+@="Open by ease-server"
+"Icon"="C:\\Program Files\\nodejs\\node.exe"
+
+[HKEY_CLASSES_ROOT\*\shell\apiServer\command]
+@="C:\\Program Files\\nodejs\\node.exe C:\\Cli\\ease-server %1"
+
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\shell\apiServer]
+@="Open by ease-server"
+"Icon"="C:\\Program Files\\nodejs\\node.exe"
+
+[HKEY_CLASSES_ROOT\Directory\shell\apiServer\command]
+@="C:\\Program Files\\nodejs\\node.exe C:\\Cli\\ease-server %1"
+
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\apiServer]
+@="Open by ease-server"
+"Icon"="C:\\Program Files\\nodejs\\node.exe"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\apiServer\command]
+@="C:\\Program Files\\nodejs\\node.exe C:\\Cli\\ease-server %1"
