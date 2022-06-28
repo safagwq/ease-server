@@ -176,10 +176,7 @@ async function start(){
         try {
 
             await new Promise((resolve,reject)=>{
-                app.listen(port, () => {
-                    resolve()
-                    // console.log(`Example app listening on port ${port}`)
-                })
+                app.listen(port, resolve).on('error',reject)
             })
     
             if(argv.readonly){
