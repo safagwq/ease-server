@@ -34,11 +34,11 @@ const { argv } = option('port', {
 
 
 const app = express()
-
 const readonly = argv.readonly
 const rootUrl = argv.dir
 let port = argv.port
 let portMax = port+3
+let http = null
 
 
 app.use((req,res,next)=>{
@@ -71,6 +71,12 @@ app.use((req,res,next)=>{
     const nativePath = Path.join( argv.dir , reqPath )
 
     switch (req.body.type) {
+        case 'closeServer':
+            res.send()
+            http.close()
+            console.log('exit for client !')
+            process.exit(0)
+            return
         case 'upload':
 
             const _file = req.files[0]
@@ -174,7 +180,7 @@ async function start(){
         try {
 
             await new Promise((resolve,reject)=>{
-                app.listen(port, resolve).on('error',reject)
+                http = app.listen(port, resolve).on('error',reject)
             })
     
             if(argv.readonly){

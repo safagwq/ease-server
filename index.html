@@ -88,6 +88,7 @@
                 <button @click="move" v-if="__showZipFiles">移动</button>
                 <button @click="zipFiles" v-if="__showZipFiles">压缩</button>
                 <button @click="unzip" v-if="__showUnzip">解压</button>
+                <button @click="closeServer" style='margin-right:10px;  '>停用</button>
             </div>
 
             <span class="flex-item expand">当前位置 : {{ __dirname }} </span>
@@ -550,6 +551,14 @@
                         requestError(error)
                     }
                 },
+                async closeServer(){
+                    if( !confirm('确定要停用服务吗 ?') ){
+                        return
+                    }
+                    await Post('/api/', { type : 'closeServer' })
+                    alert('已停用 !')
+                    location.reload()
+                },
                 async selectFile(){
                     this.setUploads( [await getFile('*/*')] )
                 },
@@ -581,8 +590,34 @@
                     }
                 },
                 async init(){
+                    
                     const { data } = await axios('/api'+this.$route.path)
-                    this.files = data.files
+                    
+                    const dirs = []
+                    const files = []
+                    const filenamesMap = new Map()
+                    data.files.forEach(file=>{
+                        filenamesMap.set(file.name , file)
+                        if(file.isFile){
+                            files.push(file)
+                        }
+                        else{
+                            dirs.push(file)
+                        }
+                    })
+                    // data.files
+
+                    // const dirs = data.files.filter(file=> !file.isFile )
+                    // const files = data.files.filter(file=> file.isFile )
+
+                    const sortedDirs = dirs.map(dir=>dir.name).sort().map((name)=>{
+                        return filenamesMap.get(name)
+                    })
+                    const sortedFiles = files.map(dir=>dir.name).sort().map((name)=>{
+                        return filenamesMap.get(name)
+                    })
+
+                    this.files = [...sortedDirs , ...sortedFiles]
                     this.status.readonly = data.readonly
                 },
             },
