@@ -320,7 +320,7 @@
                     const uploadFiles = [...this.uploadFiles]
                     for (const item of uploadFiles) {
                         try {
-                            // console.log(item);
+
                             const result = await Post('/api' + app.$route.path , {
                                 type : 'upload',
                                 ...item
@@ -590,9 +590,30 @@
                     }
                 },
                 async init(){
+                    let data = {files:[]}
+                    let path = this.$route.path
+                    const _path = path
                     
-                    const { data } = await axios('/api'+this.$route.path)
-                    
+                    for(;;){
+                        try {
+                            data = (await axios('/api'+path)).data
+                            if( path != _path ){
+                                alert(`${_path} 没有找到 , 已回退到 ${ path }`)
+                            }
+                            break
+                        }
+                        catch (error) {
+                            if( path=='/' ){
+                                alert('404 not found !')
+                                return
+                            }
+
+                            const paths = path.split('/')
+                            paths.length-=1
+                            path = paths.join('/')+'/'
+                        }
+                    }
+
                     const dirs = []
                     const files = []
                     const filenamesMap = new Map()

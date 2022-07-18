@@ -2,6 +2,7 @@ const express = require("express")
 const serveStatic = require('serve-static')
 const { option } = require('yargs')
 const { address } = require('ip')
+const publicIp = import('public-ip')
 const Path = require('path')
 const fs = require('fs-extra')
 const trash = require('trash')
@@ -11,6 +12,8 @@ const bodyParser = require('body-parser')
 
 const multer  = require('multer')
 const upload = multer()
+
+
 
 const { argv } = option('port', {
     alias: 'p',
@@ -186,15 +189,17 @@ async function start(){
             if(argv.readonly){
                 console.log('只读模式 !');
             }
+
+            const portText = port == 80 ? '' : ':'+port
             console.log(rootUrl)
-    
-            if( port == 80 ){
-                console.log(`http://localhost`)
-                console.log(`http://${ address() }`)
+            console.log(`http://localhost:${ port }`)
+            console.log(`http://${ address()+portText }`)
+            try {
+                const _publicIp = await ( (await publicIp).publicIpv4 )({ timeout : 500 , fallbackUrls : ['https://ifconfig.co/ip'] })
+                console.log(`http://${ _publicIp }`)
             }
-            else{
-                console.log(`http://localhost:${ port }`)
-                console.log(`http://${ address() }:${ port }`)
+            catch (error) {
+                // console.log(213123123,error);    
             }
             break
         }
