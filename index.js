@@ -196,7 +196,7 @@ async function start(){
             console.log(`http://${ address()+portText }`)
             try {
                 const _publicIp = await ( (await publicIp).publicIpv4 )({ timeout : 500 , fallbackUrls : ['https://ifconfig.co/ip'] })
-                console.log(`http://${ _publicIp }`)
+                console.log(`http://${ _publicIp+portText }`)
             }
             catch (error) {
                 // console.log(213123123,error);    
