@@ -10,6 +10,10 @@ const archiver = require("archiver")
 const StreamZip = require('node-stream-zip')
 const bodyParser = require('body-parser')
 
+const exec = require('child_process').exec
+// const process = require('process')
+
+
 const multer  = require('multer')
 const upload = multer()
 
@@ -34,10 +38,18 @@ const { argv } = option('port', {
     describe: "只读模式",
     type: 'boolean'
 })
+.option('open', {
+    alias: 'o',
+    string: false,
+    default: false,
+    describe: "用浏览器打开",
+    type: 'boolean'
+})
 
 
 const app = express()
 const readonly = argv.readonly
+const openByBrowser = argv.open
 const rootUrl = argv.dir
 let port = argv.port
 let portMax = port+3
@@ -194,6 +206,11 @@ async function start(){
             console.log(rootUrl)
             console.log(`http://localhost:${ port }`)
             console.log(`http://${ address()+portText }`)
+
+            if( openByBrowser ){
+                exec(`open ${ `http://localhost:${ port }` }`)
+            }
+
             try {
                 const _publicIp = await ( (await publicIp).publicIpv4 )({ timeout : 500 , fallbackUrls : ['https://ifconfig.co/ip'] })
                 console.log(`http://${ _publicIp+portText }`)
