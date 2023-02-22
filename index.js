@@ -61,7 +61,7 @@ app.use((req,res,next)=>{
     next()
 })
 .use(bodyParser.json())
-.use('/' , serveStatic( rootUrl ))
+.use('/' , serveStatic( rootUrl , { index : false } ))
 .get('/api/*', (req, res) => {
     const reqPath = decodeURI(req.path).replace(/^\/api/, '')
     const nativePath = Path.join( argv.dir , reqPath )
