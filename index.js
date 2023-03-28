@@ -23,6 +23,7 @@ const { argv } = option('port', {
     alias: 'p',
     string: true,
     default: 80,
+    type : 'number',
     describe: "端口号"
 })
 .option('dir', {
@@ -51,7 +52,7 @@ const app = express()
 const readonly = argv.readonly
 const openByBrowser = argv.open
 const rootUrl = argv.dir
-let port = argv.port
+let port = parseInt( argv.port )
 let portMax = port+3
 let http = null
 

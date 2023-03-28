@@ -75,7 +75,6 @@
 
 
     <div id="app" class="flex top" v-cloak @dragover.prevent='status.isDraging = true'>
-
         <div class="topbar flex-item flex right acenter">
             <div class="flex right acenter"  v-if="$app.status.readonly == false">
                 <button @click="uploadNow" v-if=" uploadFiles.length > 0 " style='margin-left:10px;  '>现在上传</button>
@@ -119,7 +118,10 @@
             <div class="uploadFiles flex-item flex top" :data-length="uploadFiles.length">
                 <div class="flex-item expand fixed">
                     <div class="flex-scroll" style="margin:10px;">
-                        <div>准备上传的文件 : </div>
+                        <div>
+                            <span>准备上传的文件 : </span>
+                            <button @click="removeDirName">移除文件夹的前缀 </button>
+                        </div>
                         <File 
                         v-for="file in uploadFiles" 
                         :file="file" 
@@ -412,6 +414,24 @@
                             }
                         }
                     }
+                },
+                removeDirName(){
+                    const dirnames = this.uploadFiles.map((_file)=>{
+                        return _file.name.split('/')[0]
+                    })
+
+                    if( ! dirnames.every(name=> name == dirnames[0] ) ){
+                        alert('前缀不一致 , 无法移除 !')
+                        return
+                    }
+                    if( ! confirm( `是否移除文件夹名( ${ dirnames[0] } ) ?` ) ){
+                        return
+                    }
+
+                    this.uploadFiles.forEach(_file=>{
+                        _file.name = _file.name.slice( dirnames[0].length + 1 )
+                    })
+
                 },
                 async remove(link){
                     if( this.bemoveFiles.includes(link) ){
